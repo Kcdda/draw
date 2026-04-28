@@ -4,15 +4,12 @@
     <meta charset="utf-8">
     <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
     <style>
-        body { margin: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; color: white; font-family: sans-serif; }
-        #target { background: #fff; margin-bottom: 20px; }
-        #result { font-size: 24px; display: none; }
+        body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        #target { background: #fff; }
     </style>
 </head>
 <body>
 <div id="target"></div>
-<div id="result"></div>
-
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const kanji = urlParams.get('kanji') || '火';
@@ -21,11 +18,10 @@
         showOutline: true, showHintAfterMisses: 2, strokeAnimationSpeed: 1,
         quiz: {
             onComplete: function(summaryData) {
-                const totalMistakes = summaryData.mistakesOnStroke.reduce((a,b)=>a+b,0);
+                const totalMistakes = summaryData.mistakesOnStroke.reduce((a, b) => a + b, 0);
                 const accuracy = Math.max(0, 100 - (totalMistakes * 5));
-                document.getElementById('result').style.display = 'block';
-                document.getElementById('result').innerHTML = 
-                    `Точность: <strong>${accuracy}%</strong><br>Вернитесь в игру и введите это число.`;
+                // Отправляем точность в RPG Maker
+                window.parent.postMessage({ accuracy: accuracy }, '*');
             }
         }
     });
